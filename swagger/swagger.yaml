@@ -1,0 +1,659 @@
+---
+openapi: 3.0.1
+info:
+  title: blog API 명세서
+  description: YOURSSU Backend 과제 - blog API 명세서
+  version: v1
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: UserApiController
+    description: 사용자 Api 서비스 컨트롤러
+  - name: ArticleApiController
+    description: 게시글 Api 서비스 컨트롤러
+  - name: CommentApiController
+    description: 댓글 Api 서비스 컨트롤러
+paths:
+  "/api/comments/{commentId}":
+    put:
+      tags:
+        - CommentApiController
+      summary: 댓글 수정 API
+      description: |
+        - commentId를 쿼리 파라미터로 받습니다.
+        - content 필드는 빈 문자열이나 NULL값을 허용하지 않습니다.
+        - 자신의 댓글만 수정할 수 있습니다.
+      operationId: updateComment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentUpdateResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - CommentApiController
+      summary: 댓글 삭제 API
+      description: |
+        - commentId를 쿼리 파라미터로 받습니다.
+        - 자신의 댓글만 삭제할 수 있습니다.
+      operationId: deleteComment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentDeleteRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/articles/{articleId}":
+    put:
+      tags:
+        - ArticleApiController
+      summary: 게시글 수정 API
+      description: |
+        - title, content 필드는 빈 문자열이나 NULL값을 허용하지 않습니다
+        - postId를 입력해야 합니다.
+        - 자신의 게시글만 수정할 수 있습니다.
+      operationId: updateArticle
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ArticleUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ArticleUpdateResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - ArticleApiController
+      summary: 게시글 삭제 API
+      description: |
+        - articleId를 쿼리 파라미터로 받습니다.
+        - 자신의 게시글만 삭제할 수 있습니다.
+        - 해당 게시글에 있는 댓글들 모두 삭제됩니다.
+      operationId: deleteArticle
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ArticleDeleteRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/users":
+    post:
+      tags:
+        - UserApiController
+      summary: 회원가입 API
+      description: 비밀번호를 암호화한 뒤, 회원가입을 합니다.
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserCreateResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - UserApiController
+      summary: 회원 탈퇴 API
+      description: "- 회원 탈퇴 시, 해당 회원이 작성한 게시글, 댓글들이 모두 삭제됩니다.\n"
+      operationId: deleteUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserDeleteRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/comments/{articleId}":
+    post:
+      tags:
+        - CommentApiController
+      summary: 댓글 작성 API
+      description: |
+        - content 필드는 빈 문자열이나 NULL값을 허용하지 않습니다.
+        - Article 연관관계는 id 정보를 통해 맺습니다.
+        - articleId를 쿼리 파라미터로 받습니다.
+      operationId: createComment
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentCreateResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/articles":
+    post:
+      tags:
+        - ArticleApiController
+      summary: 게시글 작성 API
+      description: |
+        - title 필드와 content 필드는 빈 문자열이나 NULL값을 허용하지 않습니다.
+        - Request에 포함된 email과 password는 이미 존재하는 유저의 정보여야 하며,
+          해당 유저의 비밀번호와 일치해야 합니다.
+      operationId: createArticle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ArticleCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ArticleCreateResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+        status:
+          type: string
+        message:
+          type: string
+        requestURL:
+          type: string
+    CommentUpdateRequest:
+      required:
+        - content
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        content:
+          type: string
+    CommentUpdateResponse:
+      type: object
+      properties:
+        commentId:
+          type: integer
+          format: int64
+        email:
+          type: string
+        content:
+          type: string
+    ArticleUpdateRequest:
+      required:
+        - content
+        - title
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+    ArticleUpdateResponse:
+      type: object
+      properties:
+        articleId:
+          type: integer
+          format: int64
+        email:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+    UserCreateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+    UserCreateResponse:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+    CommentCreateRequest:
+      required:
+        - content
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        content:
+          type: string
+    CommentCreateResponse:
+      type: object
+      properties:
+        commentId:
+          type: integer
+          format: int64
+        email:
+          type: string
+        content:
+          type: string
+    ArticleCreateRequest:
+      required:
+        - content
+        - title
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+    ArticleCreateResponse:
+      type: object
+      properties:
+        articleId:
+          type: integer
+          format: int64
+        email:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+    UserDeleteRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    CommentDeleteRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    ArticleDeleteRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
